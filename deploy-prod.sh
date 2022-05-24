@@ -27,7 +27,8 @@ then
   # Checking if there are any not committed files to add and stash followed by apply to it .
   new_mod_files="$(git status -s | sed -n 1p | awk '{print $1}')"
   
-  if [ "${new_mod_files}" == "??" ] || [ "${new_mod_files}" == "M" ]; then
+  if [ "${new_mod_files}" == "??" ] || [ "${new_mod_files}" == "M" ]; 
+  then
     sudo -u www-data git add -A
     echo "Stashing the work..."
     sudo -u www-data git stash save "auto-stash-${env}-$(date)"
@@ -35,9 +36,13 @@ then
   fi
 
   # Taking pull of the running branch
+  current_date=${get_current_date}
+  sudo -u www-data git checkout -b ${env_branch}-backup-${current_date}
+  sudo -u www-data git switch -
   yes | sudo -u www-data git pull ${remote} ${env_branch}
   
-  if [ "${stashed}" = true ]; then
+  if ${stashed}; 
+  then
     echo "Applying back Stashed work..."
     sudo -u www-data git stash apply
   fi
