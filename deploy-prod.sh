@@ -15,11 +15,11 @@ env_path=$(get_env_path "${env}" "${app_version}")
 
 # Changing Directory to application's Environment path.
 cd ${env_path}
-
+echo "$env_path"
 # Checking running branch in the Directory.
 env_branch_running="$(git symbolic-ref --short HEAD)"
 env_branch="${env}-version-${app_version:1}"
-
+echo "$env_branch -> $env_branch_running"
 if [ "${env_branch_running}" == "${env_branch}" ];
 then
   echo "Environment Branch matched!"
@@ -36,9 +36,10 @@ then
   fi
 
   # Taking pull of the running branch
-  current_date=${get_current_date}
-  sudo -u www-data git checkout -b ${env_branch}-backup-${current_date}
-  sudo -u www-data git switch -
+  backup_branch=${env_branch}-backup-$(get_current_date) 
+  echo "You can copy the new backup branch for the record: ${backup_branch}"
+  sudo -u www-data git checkout -b ${backup_branch}
+  sudo -u www-data git checkout -
   yes | sudo -u www-data git pull ${remote} ${env_branch}
   
   if ${stashed}; 
