@@ -28,7 +28,7 @@ For Testing/Staging, deployment takes place by handling scenarios.
 For production, script will create a new backup branch with date and followed by completing the deployment.
  
 WRT env:
-  $ bash ~/scripts/deploy-testing.sh env >> ~/scripts/deployment.logs; awk 'FNR <= 25' ~/scripts/deployment.logs 
+  $ bash ~/scripts/deploy-testing.sh env >> ~/scripts/deployment.logs; tail -n 25 ~/scripts/deployment.logs 
 
   
   
